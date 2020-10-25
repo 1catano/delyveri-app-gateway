@@ -1,0 +1,27 @@
+type Query {
+  getProjects: [Project]
+  project(id: ID!): Project
+}
+
+type Mutation {
+  createProject(createProjectInput: CreateProjectInput): Project
+}
+
+type Subscription {
+  projectCreated: Project
+}
+
+type Project {
+  id: String
+  name: String
+  description: String,
+  version: String,
+  lifeCycle: String
+}
+
+input CreateProjectInput {
+  name: String
+  description: String,
+  version: String,
+  lifeCycle: String
+}
