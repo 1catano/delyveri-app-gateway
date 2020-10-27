@@ -21,7 +21,7 @@ export class ProjectsResolvers {
     @Query('project')
     async findOneById(
         @Args('id')
-        id: String,
+        id: string,
     ): Promise<Project> {
         return this.projectsService.findOneById(id);
     }
