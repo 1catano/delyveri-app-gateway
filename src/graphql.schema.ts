@@ -21,6 +21,10 @@ export abstract class IQuery {
 
 export abstract class IMutation {
     abstract createProject(createProjectInput?: CreateProjectInput): Project | Promise<Project>;
+
+    abstract updateProject(id: string, updateProjectInput?: CreateProjectInput): Project | Promise<Project>;
+
+    abstract deleteProject(projectId: string): Project | Promise<Project>;
 }
 
 export abstract class ISubscription {

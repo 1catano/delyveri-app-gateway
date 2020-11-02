@@ -4,7 +4,9 @@ type Query {
 }
 
 type Mutation {
-  createProject(createProjectInput: CreateProjectInput): Project
+  createProject(createProjectInput: CreateProjectInput): Project,
+  updateProject(id: ID!, updateProjectInput: CreateProjectInput): Project,
+  deleteProject(projectId: ID!): Project
 }
 
 type Subscription {

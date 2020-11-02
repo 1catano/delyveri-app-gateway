@@ -33,6 +33,19 @@ export class ProjectsResolvers {
         return createdProject;
     }
 
+    @Mutation('updateProject')
+    async update(@Args('id') id: string, @Args('updateProjectInput') args: CreateProjectDto): Promise<Project> {
+        const updatedProject = await this.projectsService.update(id, args);
+        pubSub.publish('projectCreated', { projectCreated: updatedProject });
+        return updatedProject;
+    }
+
+    @Mutation('deleteProject')
+    async delete(@Args('projectId') id: string): Promise<Project> {
+        const deletedProject = await this.projectsService.delete(id);
+        return deletedProject;
+    }
+
     @Subscription('projectCreated')
     projectCreated() {
         return pubSub.asyncIterator('ProjectCreated');
