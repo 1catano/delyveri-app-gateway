@@ -10,44 +10,49 @@ const pubSub = new PubSub();
 
 @Resolver('Project')
 export class ProjectsResolvers {
-    constructor(private readonly projectsService: ProjectsService) { }
+  constructor(private readonly projectsService: ProjectsService) {}
 
-    @Query()
-    @UseGuards(ProjectsGuard)
-    async getProjects() {
-        return this.projectsService.findAll();
-    }
+  @Query()
+  @UseGuards(ProjectsGuard)
+  async getProjects() {
+    return this.projectsService.findAll();
+  }
 
-    @Query('project')
-    async findOneById(
-        @Args('id')
-        id: string,
-    ): Promise<Project> {
-        return this.projectsService.findOneById(id);
-    }
+  @Query('project')
+  async findOneById(
+    @Args('id')
+    id: string,
+  ): Promise<Project> {
+    return this.projectsService.findById(id);
+  }
 
-    @Mutation('createProject')
-    async create(@Args('createProjectInput') args: CreateProjectDto): Promise<Project> {
-        const createdProject = await this.projectsService.create(args);
-        pubSub.publish('projectCreated', { projectCreated: createdProject });
-        return createdProject;
-    }
+  @Mutation('createProject')
+  async create(
+    @Args('createProjectInput') args: CreateProjectDto,
+  ): Promise<Project> {
+    const createdProject = await this.projectsService.create(args);
+    pubSub.publish('projectCreated', { projectCreated: createdProject });
+    return createdProject;
+  }
 
-    @Mutation('updateProject')
-    async update(@Args('id') id: string, @Args('updateProjectInput') args: CreateProjectDto): Promise<Project> {
-        const updatedProject = await this.projectsService.update(id, args);
-        pubSub.publish('projectCreated', { projectCreated: updatedProject });
-        return updatedProject;
-    }
+  @Mutation('updateProject')
+  async update(
+    @Args('id') id: string,
+    @Args('updateProjectInput') args: CreateProjectDto,
+  ): Promise<Project> {
+    const updatedProject = await this.projectsService.update(id, args);
+    pubSub.publish('projectCreated', { projectCreated: updatedProject });
+    return updatedProject;
+  }
 
-    @Mutation('deleteProject')
-    async delete(@Args('projectId') id: string): Promise<Project> {
-        const deletedProject = await this.projectsService.delete(id);
-        return deletedProject;
-    }
+  @Mutation('deleteProject')
+  async delete(@Args('id') id: string): Promise<Project> {
+    const deletedProject = await this.projectsService.delete(id);
+    return deletedProject;
+  }
 
-    @Subscription('projectCreated')
-    projectCreated() {
-        return pubSub.asyncIterator('ProjectCreated');
-    }
+  @Subscription('projectCreated')
+  projectCreated() {
+    return pubSub.asyncIterator('ProjectCreated');
+  }
 }
