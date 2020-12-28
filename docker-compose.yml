@@ -1,0 +1,44 @@
+version: '3.7'
+
+services:
+  couchdb:
+    container_name: local-db
+    image: docker.io/bitnami/couchdb:3-debian-10
+    environment:
+      - COUCHDB_USER=admon
+      - COUCHDB_PASSWORD=123456
+      - NODENAME=localdb
+    ports:
+      - '5984:5984'
+      - '4369:4369'
+      - '9100:9100'
+    networks:
+      - nodeapp-network
+    volumes:
+      - couchdb_data:/eurekai/couchdb
+
+  node:
+    build:
+      context: .
+      dockerfile: node.dockerfile
+    ports:
+      - '3000:3000'
+    networks:
+      - nodeapp-network
+    environment:
+      - PORT=3000
+      - DB_HOST_AUTH=http://admon:123456@couchdb:5984
+      - DB_NAME=delyveri
+      - NODENAME=couchdb
+    depends_on:
+      - couchdb
+    links:
+      - couchdb
+  
+volumes:
+  couchdb_data:
+    driver: local
+  
+networks:
+  nodeapp-network:
+    driver: bridge

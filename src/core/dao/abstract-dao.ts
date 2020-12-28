@@ -4,11 +4,32 @@ import { v4 as uuidv4 } from 'uuid';
 
 export abstract class AbstractDao<T, E> implements DAO<T, E> {
   private readonly conn = Nano(process.env.DB_HOST_AUTH);
-  private readonly db = this.conn.use(process.env.DB_NAME);
+  private db: any;
   private documentName: string;
 
-  constructor(documentName: string) {
+  constructor(documentName: string, dbName?: string) {
     this.documentName = documentName;
+    this.initDatabase(dbName || process.env.DB_NAME);
+  }
+
+  private initDatabase(dbName: string) {
+    this.conn.db.list().then(async (dbList) => {
+      try {
+        if (!dbList.includes(dbName)) {
+          // create a new DB if database doesn't exist.
+          await this.conn.db.create(dbName);
+          const db = this.conn.use(dbName);
+          console.log('database created successfully');
+          this.db = db;
+        } else {
+          const db = this.conn.use(dbName);
+          console.log('connected to database successfully');
+          this.db = db;
+        }
+      } catch (err) {
+        throw new Error(err);
+      }
+    });
   }
 
   create(payload: T): Promise<T> {
