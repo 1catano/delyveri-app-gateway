@@ -1,21 +1,21 @@
-import { UseGuards } from '@nestjs/common';
+import { Inject, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver, Subscription } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
 import { Project } from '../graphql.schema';
 import { ProjectsGuard } from './projects.guard';
-import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { ClientProxy } from '@nestjs/microservices';
 
 const pubSub = new PubSub();
 
 @Resolver('Project')
 export class ProjectsResolvers {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(@Inject('PROJECTS_SERVICE') private client: ClientProxy) {}
 
   @Query()
   @UseGuards(ProjectsGuard)
   async getProjects() {
-    return this.projectsService.findAll();
+    return this.client.send({ cmd: 'get_all_projects' }, '');
   }
 
   @Query('project')
@@ -23,14 +23,16 @@ export class ProjectsResolvers {
     @Args('id')
     id: string,
   ): Promise<Project> {
-    return this.projectsService.findById(id);
+    return <Project>this.client.send({ cmd: 'get_project_by_id' }, id);
   }
 
   @Mutation('createProject')
   async create(
     @Args('createProjectInput') args: CreateProjectDto,
   ): Promise<Project> {
-    const createdProject = await this.projectsService.create(args);
+    const createdProject = await (<Project>(
+      this.client.send({ cmd: 'create_project' }, args)
+    ));
     pubSub.publish('projectCreated', { projectCreated: createdProject });
     return createdProject;
   }
@@ -40,14 +42,18 @@ export class ProjectsResolvers {
     @Args('id') id: string,
     @Args('updateProjectInput') args: CreateProjectDto,
   ): Promise<Project> {
-    const updatedProject = await this.projectsService.update(id, args);
+    const updatedProject = await (<Project>(
+      this.client.send({ cmd: 'update_project' }, { id, args })
+    ));
     pubSub.publish('projectCreated', { projectCreated: updatedProject });
     return updatedProject;
   }
 
   @Mutation('deleteProject')
   async delete(@Args('id') id: string): Promise<Project> {
-    const deletedProject = await this.projectsService.delete(id);
+    const deletedProject = await (<Project>(
+      this.client.send({ cmd: 'delete_project' }, id)
+    ));
     return deletedProject;
   }
 

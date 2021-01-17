@@ -10,6 +10,7 @@ import { ProjectsModule } from './projects/projects.module';
       typePaths: ['./**/*.graphql'],
       installSubscriptionHandlers: true,
     }),
-    ConfigModule.forRoot()],
+    ConfigModule.forRoot(),
+  ],
 })
-export class AppModule { }
+export class AppModule {}

@@ -6,7 +6,7 @@ type Query {
 type Mutation {
   createProject(createProjectInput: CreateProjectInput): Project,
   updateProject(id: ID!, updateProjectInput: CreateProjectInput): Project,
-  deleteProject(projectId: ID!): Project
+  deleteProject(id: ID!): Project
 }
 
 type Subscription {
