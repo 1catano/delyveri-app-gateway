@@ -24,7 +24,7 @@ export abstract class IMutation {
 
     abstract updateProject(id: string, updateProjectInput?: CreateProjectInput): Project | Promise<Project>;
 
-    abstract deleteProject(projectId: string): Project | Promise<Project>;
+    abstract deleteProject(id: string): Project | Promise<Project>;
 }
 
 export abstract class ISubscription {
