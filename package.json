@@ -32,6 +32,7 @@
     "class-validator": "^0.12.2",
     "graphql": "^15.3.0",
     "graphql-tools": "^7.0.0",
+    "kafkajs": "^1.15.0",
     "nano": "^9.0.1",
     "pm2": "^4.5.0",
     "reflect-metadata": "^0.1.13",
