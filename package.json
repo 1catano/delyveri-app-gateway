@@ -19,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "generate-typings": "ts-node src/generate-typings"
   },
   "dependencies": {
     "@nestjs/common": "^7.5.5",
@@ -32,9 +33,12 @@
     "class-validator": "^0.12.2",
     "graphql": "^15.3.0",
     "graphql-tools": "^7.0.0",
+    "graphql-upload": "^11.0.0",
     "kafkajs": "^1.15.0",
     "nano": "^9.0.1",
     "pm2": "^4.5.0",
+    "redis": "^3.0.2",
+    "redis-wstream": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.5.4",
@@ -48,6 +52,7 @@
     "@types/jest": "^26.0.15",
     "@types/nano": "^7.0.0",
     "@types/node": "^14.14.6",
+    "@types/redis": "^2.8.28",
     "@types/supertest": "^2.0.10",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.6.1",

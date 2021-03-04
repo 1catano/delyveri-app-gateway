@@ -1,0 +1,10 @@
+{
+  "projects": [
+    "projects-get-all",
+    "projects-exec-create",
+    "projects-get-project",
+    "projects-exec-update",
+    "projects-exec-delete"
+  ],
+  "datasource": ["datasource-exec-upload"]
+}
